@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#0ea5e9" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>MFX Day - PWA offline</title>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand" aria-label="MFX Day">
+            <div class="logo" aria-hidden="true">M</div>
+            <div>
+              <h1>MFX Day</h1>
+              <p>Rotina do dia, offline-first</p>
+            </div>
+          </div>
+
+          <nav class="nav" aria-label="Navegação">
+            <a href="#/dashboard" data-route-link="dashboard">Dashboard</a>
+            <a href="#/checkin" data-route-link="checkin">Check-in</a>
+            <a href="#/meals" data-route-link="meals">Refeições</a>
+            <a href="#/groups" data-route-link="groups">Grupos</a>
+          </nav>
+
+          <div class="status" aria-live="polite">
+            <span class="dot" aria-hidden="true"></span>
+            <span data-online-text>...</span>
+          </div>
+        </div>
+      </header>
+
+      <main id="app" class="content" role="main" aria-busy="false"></main>
+
+      <div class="toast-wrap" aria-live="polite" aria-relevant="additions"></div>
+
+      <div class="install-banner" aria-label="Instalação do App">
+        <div class="install-banner-inner">
+          <div>
+            <div class="install-title">Instalar App</div>
+            <div class="install-subtitle">
+              Disponível offline e com aparência de app nativo.
+            </div>
+          </div>
+          <button class="btn primary" type="button" id="install-btn">Instalar App</button>
+        </div>
+        <div class="install-help" id="install-help" hidden>
+          Se a instalação automática não aparecer: toque em
+          <span class="kbd">Compartilhar</span> → <span class="kbd">Adicionar à tela de início</span>.
+        </div>
+      </div>
+
+      <div class="offline-strip" hidden role="status" aria-live="polite">
+        Sem internet: usando dados locais.
+      </div>
+
+      <div class="loading-overlay" hidden aria-hidden="true">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="loading-text">Carregando...</div>
+      </div>
+    </div>
+
+    <noscript>
+      <div style="padding: 16px; font-family: Inter, system-ui, sans-serif">
+        Este app precisa de JavaScript habilitado.
+      </div>
+    </noscript>
+
+    <script defer src="./main.js"></script>
+  </body>
+</html>
+
