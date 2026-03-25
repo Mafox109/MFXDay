@@ -29,41 +29,10 @@ export async function renderPage() {
   const completedCount = checkin?.taskIdsCompleted?.length || 0;
   const totalTasks = tasksToday.length;
 
-  const grid = el('div', { class: 'grid grid-3' });
-
-  grid.appendChild(
-    el('section', { class: 'card' }, [
-      el('div', { class: 'row' }, [
-        el('h2', {}, 'Hoje'),
-        el('div', { class: 'muted' }, `${mealsToday.length} refeições`),
-      ]),
-      el('p', { class: 'muted' }, `Últimos 7 dias: ${meals7} registros`),
-    ])
-  );
-
-  grid.appendChild(
-    el('section', { class: 'card' }, [
-      el('div', { class: 'row' }, [
-        el('h2', {}, 'Check-in'),
-        el('div', { class: 'muted' }, checkin ? 'Salvo' : 'Pendente'),
-      ]),
-      el('p', { class: 'muted' }, `Nota: ${formatRating(checkin?.rating)}`),
-    ])
-  );
-
-  grid.appendChild(
-    el('section', { class: 'card' }, [
-      el('div', { class: 'row' }, [
-        el('h2', {}, 'Tarefas do dia'),
-        el('div', { class: 'muted' }, `${completedCount}/${totalTasks}`),
-      ]),
-      el('p', { class: 'muted' }, totalTasks === 0 ? 'Crie tarefas para habilitar o check-in.' : 'Marque as conclusões e registre sua reflexão.' ),
-    ])
-  );
-
+  // Seção de atalhos no topo - sem margin-top
   const shortcuts = el(
     'section',
-    { class: 'card', style: 'margin-top: 12px;' },
+    { class: 'card', style: 'margin-top: 0;' },
     el('div', {}, [
       el('h3', {}, 'Atalhos'),
       el('p', { class: 'muted' }, 'Fluxo rápido, pensado para mobile-first.'),
@@ -101,6 +70,48 @@ export async function renderPage() {
     ])
   );
 
-  return el('div', {}, [grid, shortcuts]);
+  // Grid com as 3 seções lado a lado - com margin-top
+  const grid = el('div', { class: 'grid grid-3', style: 'margin-top: 12px;' });
+
+  grid.appendChild(
+    el('section', { class: 'card' }, [
+      el('div', { class: 'row' }, [
+        el('h2', {}, 'Hoje'),
+        el('div', { class: 'muted' }, `${mealsToday.length} refeições`),
+      ]),
+      el('p', { class: 'muted' }, `Tarefas: ${completedCount}/${totalTasks}`),
+    ])
+  );
+
+  grid.appendChild(
+    el('section', { class: 'card' }, [
+      el('div', { class: 'row' }, [
+        el('h2', {}, 'Check-in'),
+        el('div', { class: 'muted' }, checkin ? 'Salvo' : 'Pendente'),
+      ]),
+      el('p', { class: 'muted' }, `Nota: ${formatRating(checkin?.rating)}`),
+    ])
+  );
+
+  grid.appendChild(
+    el('section', { class: 'card' }, [
+      el('div', { class: 'row' }, [
+        el('h2', {}, 'Semana'),
+        el('div', { class: 'muted' }, 'Últimos 7 dias'),
+      ]),
+      el('p', { class: 'muted' }, `Refeições registradas: ${meals7}`),
+    ])
+  );
+
+  // Retornar shortcuts primeiro, grid depois - ordem explícita
+  const container = el('div', {});
+  
+  // Adicionar shortcuts primeiro
+  container.appendChild(shortcuts);
+  
+  // Adicionar grid depois
+  container.appendChild(grid);
+
+  return container;
 }
 

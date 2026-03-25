@@ -93,6 +93,53 @@ textarea{ resize: vertical; }
   color: var(--text2);
 }
 
+.mobile-menu-btn{
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.mobile-menu-btn:hover{
+  background: rgba(148,163,184,0.1);
+}
+.hamburger{
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text0);
+  position: relative;
+  transition: 0.2s;
+}
+.hamburger::before,
+.hamburger::after{
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: var(--text0);
+  transition: 0.2s;
+}
+.hamburger::before{
+  top: -6px;
+}
+.hamburger::after{
+  top: 6px;
+}
+.mobile-menu-btn[aria-expanded="true"] .hamburger{
+  background: transparent;
+}
+.mobile-menu-btn[aria-expanded="true"] .hamburger::before{
+  top: 0;
+  transform: rotate(45deg);
+}
+.mobile-menu-btn[aria-expanded="true"] .hamburger::after{
+  top: 0;
+  transform: rotate(-45deg);
+}
+
 .nav{
   display:flex;
   gap: 8px;
@@ -149,15 +196,249 @@ textarea{ resize: vertical; }
   gap: 12px;
 }
 .grid-2{
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 .grid-3{
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Dashboard layout - simplificado */
+#app > div > section:first-child {
+  margin-top: 0 !important;
+}
+
+/* Melhorias para cards em mobile */
+@media (max-width: 768px) {
+  .grid {
+    gap: 10px;
+  }
+  
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .card h2, .card h3 {
+    font-size: 16px;
+  }
+  
+  .card p {
+    font-size: 13px;
+  }
+  
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .row > *:last-child {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    gap: 8px;
+  }
+  
+  .card h2, .card h3 {
+    font-size: 15px;
+  }
+  
+  .card p {
+    font-size: 12px;
+  }
+  
+  .stars {
+    gap: 8px;
+  }
+  
+  .star {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  .heat {
+    gap: 4px;
+  }
+  
+  .heat .cell {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
 }
 
 @media (min-width: 900px){
   .grid-2{ grid-template-columns: 1fr 1fr; }
-  .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
+  /* grid-3 já está definido como 3 colunas no base */
+}
+
+/* Mobile first - breakpoints para tablets e mobile */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(2,6,23,0.95);
+    border-bottom: 1px solid rgba(148,163,184,0.18);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav.nav-open {
+    display: flex;
+  }
+  
+  .nav a {
+    width: calc(50% - 3px);
+    text-align: center;
+    padding: 12px 8px;
+  }
+  
+  .topbar {
+    position: relative;
+  }
+  
+  .topbar-inner {
+    padding: 10px 12px;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  
+  .brand {
+    min-width: auto;
+    gap: 8px;
+    flex: 1;
+  }
+  
+  .brand h1 {
+    font-size: 13px;
+  }
+  
+  .brand p {
+    display: none;
+  }
+  
+  .status {
+    min-width: auto;
+    font-size: 12px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .install-banner {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 10px;
+  }
+  
+  .install-buttons {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .install-close {
+    align-self: flex-end;
+  }
+  
+  .toast-wrap {
+    right: 10px;
+    bottom: 100px;
+    width: calc(100vw - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-menu-btn {
+    padding: 6px;
+  }
+  
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    width: 18px;
+    height: 2px;
+  }
+  
+  .hamburger::before {
+    top: -5px;
+  }
+  
+  .hamburger::after {
+    top: 5px;
+  }
+  
+  .nav a {
+    width: 100%;
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+  
+  .topbar-inner {
+    padding: 8px 10px;
+  }
+  
+  .logo {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .brand h1 {
+    font-size: 12px;
+  }
+  
+  .status {
+    font-size: 11px;
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
+  .card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .install-banner {
+    border-radius: 12px;
+    padding: 8px;
+  }
+  
+  .install-banner-inner {
+    gap: 10px;
+  }
+  
+  .install-title {
+    font-size: 13px;
+  }
+  
+  .install-subtitle {
+    font-size: 11px;
+  }
 }
 
 .card{
@@ -242,6 +523,10 @@ textarea{ resize: vertical; }
   justify-content:center;
   z-index: 100;
 }
+
+.loading-overlay[hidden] {
+  display: none;
+}
 .loading-overlay .spinner{
   width: 44px;
   height: 44px;
@@ -254,6 +539,31 @@ textarea{ resize: vertical; }
   margin-top: 10px;
   color: var(--text1);
   font-weight: 700;
+}
+
+/* Ajustes para loading overlay em mobile */
+@media (max-width: 768px) {
+  .loading-overlay .spinner {
+    width: 36px;
+    height: 36px;
+    border-width: 2px;
+  }
+  
+  .loading-overlay .loading-text {
+    font-size: 14px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-overlay .spinner {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .loading-overlay .loading-text {
+    font-size: 13px;
+  }
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
@@ -276,6 +586,44 @@ textarea{ resize: vertical; }
   align-items:flex-start;
   justify-content:space-between;
   gap: 14px;
+}
+.install-buttons{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+}
+.install-close{
+  background: none;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.2s;
+}
+.install-close:hover{
+  background: rgba(148,163,184,0.1);
+  color: var(--text0);
+}
+.install-dismiss{
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148,163,184,0.1);
+}
+.install-dismiss label{
+  display:flex;
+  align-items:center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+}
+.install-dismiss input[type="checkbox"]{
+  margin: 0;
+  width: 14px;
+  height: 14px;
 }
 .install-title{
   font-family: var(--font-heading);
@@ -342,6 +690,54 @@ textarea{ resize: vertical; }
   gap: 8px;
   margin-top: 10px;
   flex-wrap: wrap;
+}
+
+/* Ajustes para toast em mobile */
+@media (max-width: 768px) {
+  .toast-wrap {
+    right: 10px;
+    bottom: 90px;
+    width: calc(100vw - 20px);
+    gap: 8px;
+  }
+  
+  .toast {
+    padding: 10px;
+    border-radius: 12px;
+  }
+  
+  .toast h4 {
+    font-size: 13px;
+  }
+  
+  .toast p {
+    font-size: 12px;
+  }
+  
+  .toast .actions {
+    gap: 6px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-wrap {
+    right: 8px;
+    bottom: 80px;
+    width: calc(100vw - 16px);
+  }
+  
+  .toast {
+    padding: 8px;
+  }
+  
+  .toast h4 {
+    font-size: 12px;
+  }
+  
+  .toast p {
+    font-size: 11px;
+  }
 }
 
 .stars{

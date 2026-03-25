@@ -177,6 +177,8 @@ const ui = {
   installBanner: document.querySelector('.install-banner'),
   installHelp: document.getElementById('install-help'),
   installBtn: document.getElementById('install-btn'),
+  installClose: document.getElementById('install-close'),
+  installDismiss: document.getElementById('install-dismiss'),
   offlineStrip: document.querySelector('.offline-strip'),
   toast: toastController(),
   setLoading(loading) {
@@ -914,7 +916,7 @@ async function renderRoute() {
   ui.setLoading(true);
   try {
     await initSeedIfNeeded();
-    await sleep(80);
+    
     if (route.page === 'dashboard') ui.appHost.appendChild(renderDashboard());
     else if (route.page === 'checkin') ui.appHost.appendChild(renderCheckin());
     else if (route.page === 'meals') ui.appHost.appendChild(renderMeals());
@@ -950,7 +952,16 @@ async function registerServiceWorker() {
 function setupInstallPrompt() {
   const banner = ui.installBanner;
   const btn = ui.installBtn;
+  const closeBtn = ui.installClose;
+  const dismissCheckbox = ui.installDismiss;
   const help = ui.installHelp;
+
+  // Verificar se usuário já dispensou o banner
+  const isDismissed = localStorage.getItem('install-banner-dismissed') === 'true';
+  if (isDismissed) {
+    banner.hidden = true;
+    return;
+  }
 
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
   if (isStandalone) {
@@ -968,6 +979,16 @@ function setupInstallPrompt() {
   function showHelp() {
     help.hidden = false;
   }
+
+  function hideBanner() {
+    banner.hidden = true;
+    if (dismissCheckbox.checked) {
+      localStorage.setItem('install-banner-dismissed', 'true');
+    }
+  }
+
+  // Botão X para fechar
+  closeBtn.addEventListener('click', hideBanner);
 
   // iOS/Safari pode não disparar beforeinstallprompt.
   helpTimeout = setTimeout(() => {
@@ -997,7 +1018,7 @@ function setupInstallPrompt() {
       const choice = await deferredPrompt.userChoice;
       if (choice?.outcome === 'accepted') {
         ui.toast.show({ title: 'Instalando...', message: 'App será adicionado à tela inicial.' });
-        banner.hidden = true;
+        hideBanner();
       } else {
         showHelp();
       }
@@ -1017,5 +1038,35 @@ function setupInstallPrompt() {
   await registerServiceWorker();
   setupInstallPrompt();
   setupRouting();
+  setupMobileMenu();
 })();
+
+function setupMobileMenu() {
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const nav = document.querySelector('.nav');
+  
+  if (!menuBtn || !nav) return;
+  
+  menuBtn.addEventListener('click', () => {
+    const isOpen = menuBtn.getAttribute('aria-expanded') === 'true';
+    menuBtn.setAttribute('aria-expanded', !isOpen);
+    nav.classList.toggle('nav-open', !isOpen);
+  });
+  
+  // Fecha menu ao clicar em um link
+  nav.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+      menuBtn.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('nav-open');
+    }
+  });
+  
+  // Fecha menu ao clicar fora
+  document.addEventListener('click', (e) => {
+    if (!menuBtn.contains(e.target) && !nav.contains(e.target)) {
+      menuBtn.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('nav-open');
+    }
+  });
+}
 
